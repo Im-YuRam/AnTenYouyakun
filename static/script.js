@@ -1,3 +1,25 @@
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".info-icon").forEach(icon => {
+        // ツールチップ要素を作成
+        const tooltip = document.createElement("div");
+        tooltip.classList.add("tooltip");
+        tooltip.textContent = icon.getAttribute("data-info");
+
+        // アイコンの子要素として追加
+        icon.appendChild(tooltip);
+
+        // マウスオーバーで表示
+        icon.addEventListener("mouseover", () => {
+            tooltip.style.opacity = "1";
+        });
+
+        // マウスアウトで非表示
+        icon.addEventListener("mouseout", () => {
+            tooltip.style.opacity = "0";
+        });
+    });
+});
+
 document.getElementById("summary-form").addEventListener("submit", async function(event) {
     event.preventDefault(); // フォームの送信を防ぐ
 
@@ -9,7 +31,7 @@ document.getElementById("summary-form").addEventListener("submit", async functio
     const num_return_sequences = parseInt(document.getElementById("num_return_sequences").value);
 
     const apiUrl = "https://api-inference.huggingface.co/models/llm-book/t5-base-long-livedoor-news-corpus";
-    const apiKey = "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"; // Hugging Face APIキーを設定(悪用禁止！3/10ぐらいに削除するつもりです)
+    const apiKey = "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"; 
 
     const requestData = {
         inputs: text,
@@ -36,13 +58,10 @@ document.getElementById("summary-form").addEventListener("submit", async functio
             body: JSON.stringify(requestData)
         });
 
-        if (!response.ok) {
-            throw new Error("APIエラー: " + response.statusText);
-        }
+        if (!response.ok) throw new Error("APIエラー: " + response.statusText);
 
         const resultData = await response.json();
-        const summaries = resultData.map(res => res.generated_text).join("\n\n");
-        document.getElementById("result").textContent = summaries;
+        document.getElementById("result").textContent = resultData.map(res => res.generated_text).join("\n\n");
     } catch (error) {
         console.error("要約エラー:", error);
         document.getElementById("result").textContent = "要約に失敗しました。";
