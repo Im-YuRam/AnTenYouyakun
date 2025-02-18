@@ -69,24 +69,28 @@ textarea {
     background-size: cover;
     cursor: pointer;
     margin-left: 10px;
+    position: relative;
 }
 
 /* ツールチップ */
 .tooltip {
     position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: #333;
     color: white;
     font-size: 12px;
     padding: 5px 10px;
     border-radius: 5px;
     white-space: nowrap;
-    visibility: visible;
-    opacity: 1;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
     z-index: 1000;
-    display: none;
+    pointer-events: none;
 }
 
-/* .info-icon::after の削除 */
-.info-icon::after {
-    content: none;
+/* ホバー時に表示 */
+.info-icon:hover .tooltip {
+    opacity: 1;
 }
